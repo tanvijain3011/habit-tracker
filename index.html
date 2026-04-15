@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Streakly — Habit Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style2.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       DASHBOARD SCREEN
+  ════════════════════════════════════════════ -->
+  <div id="screen-dashboard" class="screen active">
+
+    <header class="topbar">
+      <div class="logo">
+        <span class="logo-dot"></span>
+        <span class="logo-text">Streakly</span>
+      </div>
+      <button class="icon-btn" id="add-habit-btn" title="Add new habit">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+    </header>
+
+    <main class="dashboard-main">
+      <div class="dashboard-greeting" id="dashboard-greeting"></div>
+      <div class="dashboard-date" id="dashboard-date"></div>
+
+      <!-- Habit cards list -->
+      <div id="habits-list" class="habits-list"></div>
+
+      <!-- Empty state -->
+      <div id="empty-state" class="empty-state hidden">
+        <div class="empty-icon">🌱</div>
+        <p class="empty-title">No habits yet</p>
+        <p class="empty-body">Tap the <strong>+</strong> button to add your first habit and start building streaks.</p>
+        <button class="cta-btn" id="empty-add-btn">Add your first habit</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       DETAIL SCREEN  (single habit view)
+  ════════════════════════════════════════════ -->
+  <div id="screen-detail" class="screen hidden">
+
+    <header class="topbar">
+      <button class="back-btn" id="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span>All habits</span>
+      </button>
+      <div class="topbar-actions">
+        <button class="icon-btn danger" id="delete-habit-btn" title="Delete habit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4h6v2"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="detail-main">
+
+      <!-- Editable habit name -->
+      <div class="detail-name-wrap">
+        <div class="detail-emoji" id="detail-emoji"></div>
+        <input class="detail-name-input" id="detail-name-input" maxlength="48" />
+      </div>
+
+      <!-- Streak ring -->
+      <div class="streak-hero">
+        <div class="streak-ring" id="streak-ring">
+          <svg class="ring-svg" viewBox="0 0 200 200">
+            <circle class="ring-bg"   cx="100" cy="100" r="82"/>
+            <circle class="ring-fill" id="ring-fill-circle" cx="100" cy="100" r="82"/>
+          </svg>
+          <div class="streak-inner">
+            <span class="streak-number" id="streak-number">0</span>
+            <span class="streak-label">day streak</span>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="streak-stats">
+          <div class="stat-chip">
+            <span class="stat-val" id="stat-best">0</span>
+            <span class="stat-key">best</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-chip">
+            <span class="stat-val" id="stat-total">0</span>
+            <span class="stat-key">total days</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-chip">
+            <span class="stat-val" id="stat-rate">0%</span>
+            <span class="stat-key">this month</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Log button -->
+      <div class="checkin-card">
+        <div class="checkin-date" id="detail-date"></div>
+        <div class="checkin-status" id="detail-status"></div>
+        <button class="log-btn" id="log-btn">
+          <span class="log-btn-icon">✓</span>
+          <span class="log-btn-text">Mark done for today</span>
+        </button>
+      </div>
+
+      <!-- Calendar -->
+      <div class="calendar-section">
+        <div class="calendar-header">
+          <span class="calendar-title" id="calendar-month-label"></span>
+          <div class="calendar-nav">
+            <button class="cal-nav-btn" id="cal-prev">‹</button>
+            <button class="cal-nav-btn" id="cal-next">›</button>
+          </div>
+        </div>
+        <div class="calendar-days-header">
+          <span>S</span><span>M</span><span>T</span><span>W</span>
+          <span>T</span><span>F</span><span>S</span>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       ADD / EDIT HABIT MODAL
+  ════════════════════════════════════════════ -->
+  <div id="habit-modal" class="modal-overlay hidden">
+    <div class="modal-box" id="modal-box">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">New Habit</h2>
+        <button class="close-btn" id="modal-close">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Emoji picker row -->
+        <label class="modal-label">Choose an icon</label>
+        <div class="emoji-picker" id="emoji-picker"></div>
+
+        <!-- Name input -->
+        <label class="modal-label">Habit name</label>
+        <input class="habit-input" id="modal-habit-name" type="text"
+               maxlength="48" placeholder="e.g. Meditate for 10 minutes"
+               autocomplete="off" spellcheck="false"/>
+
+        <!-- Color picker -->
+        <label class="modal-label">Accent colour</label>
+        <div class="color-picker" id="color-picker"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="cta-btn" id="modal-save-btn">Save habit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFETTI CANVAS -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="app2.js"></script>
+</body>
+</html>
